@@ -3,6 +3,7 @@ version: '3.8'
 services:
   habla:
     image: ghcr.io/pghart/habla:latest
+    pull_policy: always
     ports:
       - "3737:3000"
     volumes:
