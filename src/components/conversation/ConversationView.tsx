@@ -18,14 +18,14 @@ export function ConversationView({ sessionId, topic, initialMessages }: Conversa
   const { messages, isStreaming, sendMessage, setInitialMessages } = useConversation(sessionId)
   const { isPlaying, isLoading: ttsLoading, playText, pause, resume } = useTTS()
   const [inputText, setInputText] = useState('')
-  const inputRef = useRef<HTMLInputElement>(null)
   const sessionStartRef = useRef(Date.now())
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     setInitialMessages(initialMessages)
   }, [initialMessages, setInitialMessages])
 
-  // Heartbeat to update session duration
+  // Heartbeat + cleanup
   useEffect(() => {
     const interval = setInterval(async () => {
       const seconds = Math.floor((Date.now() - sessionStartRef.current) / 1000)
@@ -51,9 +51,7 @@ export function ConversationView({ sessionId, topic, initialMessages }: Conversa
     if (!text.trim() || isStreaming) return
     setInputText('')
     const assistantText = await sendMessage(text)
-    if (assistantText) {
-      await playText(assistantText)
-    }
+    if (assistantText) await playText(assistantText)
   }, [isStreaming, sendMessage, playText])
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -65,11 +63,16 @@ export function ConversationView({ sessionId, topic, initialMessages }: Conversa
 
   return (
     <div className="flex flex-col h-full">
-      {/* Topic header */}
-      <div className="px-6 py-3 bg-white border-b border-slate-200 flex items-center justify-between">
-        <div>
-          <h2 className="text-sm font-semibold text-slate-800">{topic}</h2>
-          <p className="text-xs text-slate-400">Practicing with Sofía</p>
+      {/* Header */}
+      <div className="px-4 md:px-6 py-3 bg-white border-b border-slate-100 flex items-center justify-between gap-3 shrink-0">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-sm font-bold shrink-0 shadow-sm">
+            S
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-slate-800 truncate">Sofía</p>
+            <p className="text-xs text-slate-400 truncate">{topic}</p>
+          </div>
         </div>
         <TTSPlayer isPlaying={isPlaying} isLoading={ttsLoading} onPause={pause} onResume={resume} />
       </div>
@@ -78,24 +81,24 @@ export function ConversationView({ sessionId, topic, initialMessages }: Conversa
       <MessageList messages={messages} />
 
       {/* Input bar */}
-      <div className="px-4 py-3 bg-white border-t border-slate-200">
-        <div className="flex items-center gap-3">
-          <AudioRecorder onTranscript={(t) => handleSend(t)} disabled={isStreaming} />
+      <div className="px-3 md:px-4 py-3 bg-white border-t border-slate-100 shrink-0">
+        <div className="flex items-center gap-2 md:gap-3">
+          <AudioRecorder onTranscript={t => handleSend(t)} disabled={isStreaming} />
           <input
             ref={inputRef}
             value={inputText}
             onChange={e => setInputText(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type in Spanish or English..."
+            placeholder="Type in Spanish or English…"
             disabled={isStreaming}
-            className="flex-1 border border-slate-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 disabled:opacity-60"
+            className="flex-1 min-w-0 bg-slate-100 border-0 rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition-colors disabled:opacity-60 placeholder:text-slate-400"
           />
           <button
             onClick={() => handleSend(inputText)}
             disabled={!inputText.trim() || isStreaming}
-            className="w-10 h-10 rounded-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 flex items-center justify-center transition-colors"
+            className="w-11 h-11 rounded-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-40 flex items-center justify-center transition-colors shrink-0 shadow-sm"
           >
-            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-white translate-x-px" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
             </svg>
           </button>

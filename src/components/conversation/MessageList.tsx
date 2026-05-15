@@ -12,12 +12,16 @@ export function MessageList({ messages }: { messages: ChatMessage[] }) {
   }, [messages])
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4 scrollbar-thin">
+    <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
       {messages.length === 0 && (
-        <div className="text-center text-slate-400 text-sm mt-12">
-          <p className="text-4xl mb-3">💬</p>
-          <p>Start the conversation — type or use the mic below.</p>
-          <p className="text-xs mt-1 text-slate-300">Sofía is ready to practice with you.</p>
+        <div className="flex flex-col items-center justify-center h-full min-h-[200px] text-center px-6 pt-8">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center text-3xl mb-4 shadow-inner">
+            💬
+          </div>
+          <p className="text-slate-700 font-medium text-base">Ready to practice!</p>
+          <p className="text-slate-400 text-sm mt-1.5 max-w-xs">
+            Type a message or tap the mic button to start speaking with Sofía.
+          </p>
         </div>
       )}
       {messages.map(msg => (

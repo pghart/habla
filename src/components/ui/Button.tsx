@@ -10,17 +10,17 @@ export function Button({ variant = 'primary', size = 'md', className, children, 
   return (
     <button
       className={cn(
-        'inline-flex items-center justify-center font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
+        'inline-flex items-center justify-center font-medium rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]',
         {
-          'bg-indigo-600 hover:bg-indigo-700 text-white': variant === 'primary',
-          'bg-white border border-slate-300 hover:bg-slate-50 text-slate-700': variant === 'secondary',
+          'bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm': variant === 'primary',
+          'bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 shadow-sm': variant === 'secondary',
           'hover:bg-slate-100 text-slate-700': variant === 'ghost',
-          'bg-red-600 hover:bg-red-700 text-white': variant === 'danger',
+          'bg-red-500 hover:bg-red-600 text-white shadow-sm': variant === 'danger',
         },
         {
-          'text-xs px-2.5 py-1.5': size === 'sm',
-          'text-sm px-4 py-2': size === 'md',
-          'text-base px-5 py-2.5': size === 'lg',
+          'text-xs px-3 py-2 min-h-[36px]': size === 'sm',
+          'text-sm px-4 py-2.5 min-h-[44px]': size === 'md',
+          'text-base px-5 py-3 min-h-[48px]': size === 'lg',
         },
         className
       )}
