@@ -65,14 +65,14 @@ export function ConversationView({ sessionId, topic, initialMessages }: Conversa
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="px-4 md:px-6 py-3 bg-white border-b border-slate-100 flex items-center justify-between gap-3 shrink-0">
+      <div className="px-4 md:px-6 py-3 bg-white border-b border-slate-100 dark:bg-slate-900 dark:border-slate-800 flex items-center justify-between gap-3 shrink-0">
         <div className="flex items-center gap-3 min-w-0">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-sm font-bold shrink-0 shadow-sm">
             S
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-slate-800 truncate">Sofía</p>
-            <p className="text-xs text-slate-400 truncate">{topic}</p>
+            <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">Sofía</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500 truncate">{topic}</p>
           </div>
         </div>
         <TTSPlayer isPlaying={isPlaying} isLoading={ttsLoading} onPause={pause} onResume={resume} />
@@ -82,7 +82,7 @@ export function ConversationView({ sessionId, topic, initialMessages }: Conversa
       <MessageList messages={messages} onReplay={playText} />
 
       {/* Input bar */}
-      <div className="px-3 md:px-4 py-3 bg-white border-t border-slate-100 shrink-0">
+      <div className="px-3 md:px-4 py-3 bg-white border-t border-slate-100 dark:bg-slate-900 dark:border-slate-800 shrink-0">
         <div className="flex items-center gap-2 md:gap-3">
           <AudioRecorder onTranscript={t => handleSend(t)} disabled={isStreaming} />
           <input
@@ -92,7 +92,7 @@ export function ConversationView({ sessionId, topic, initialMessages }: Conversa
             onKeyDown={handleKeyDown}
             placeholder="Type in Spanish or English…"
             disabled={isStreaming}
-            className="flex-1 min-w-0 bg-slate-100 border-0 rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition-colors disabled:opacity-60 placeholder:text-slate-400"
+            className="flex-1 min-w-0 bg-slate-100 border-0 rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition-colors disabled:opacity-60 placeholder:text-slate-400 dark:bg-slate-800 dark:text-slate-100 dark:focus:bg-slate-700 dark:placeholder:text-slate-500"
           />
           <button
             onClick={() => handleSend(inputText)}

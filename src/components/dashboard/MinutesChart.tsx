@@ -18,8 +18,8 @@ export function MinutesChart({ data }: { data: number[] }) {
   }))
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-4">This week</p>
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 dark:bg-slate-900 dark:border-slate-800">
+      <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-4">This week</p>
       <ResponsiveContainer width="100%" height={130}>
         <BarChart data={chartData} margin={{ top: 0, right: 4, left: -24, bottom: 0 }}>
           <XAxis

@@ -83,8 +83,8 @@ export function TopicSelector() {
   return (
     <div className="px-4 py-6 md:p-8 max-w-2xl mx-auto">
       <div className="mb-6">
-        <h2 className="text-xl md:text-2xl font-bold text-slate-800">Conversations</h2>
-        <p className="text-sm text-slate-500 mt-1">Pick a topic to start or resume.</p>
+        <h2 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-100">Conversations</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Pick a topic to start or resume.</p>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -97,22 +97,22 @@ export function TopicSelector() {
               <button
                 onClick={() => selectTopic(topic)}
                 disabled={!!loadingSlug}
-                className="w-full h-full bg-white border border-slate-200 rounded-2xl p-4 text-left hover:border-indigo-300 hover:shadow-md active:scale-[0.98] transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full h-full bg-white border border-slate-200 rounded-2xl p-4 text-left hover:border-indigo-300 hover:shadow-md active:scale-[0.98] transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed dark:bg-slate-900 dark:border-slate-800 dark:hover:border-indigo-500"
               >
                 <span className="text-3xl block mb-2.5">{topic.icon}</span>
                 <span className="flex items-center gap-1.5">
-                  <span className="block text-sm font-semibold text-slate-800 group-hover:text-indigo-700 transition-colors leading-snug">
+                  <span className="block text-sm font-semibold text-slate-800 dark:text-slate-100 group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition-colors leading-snug">
                     {isLoading ? 'Opening…' : topic.label}
                   </span>
                   {isLoading && <Spinner className="w-3 h-3 text-indigo-500 shrink-0" />}
                 </span>
                 {sess ? (
-                  <span className="block text-xs text-indigo-600 mt-1 font-medium">
+                  <span className="block text-xs text-indigo-600 dark:text-indigo-400 mt-1 font-medium">
                     {sess._count.messages} msg
                     {sess.durationSec > 0 && ` · ${formatDuration(sess.durationSec)}`} · Resume →
                   </span>
                 ) : (
-                  <span className="block text-xs text-slate-400 mt-0.5 leading-snug">{topic.description}</span>
+                  <span className="block text-xs text-slate-400 dark:text-slate-500 mt-0.5 leading-snug">{topic.description}</span>
                 )}
               </button>
               {sess && (

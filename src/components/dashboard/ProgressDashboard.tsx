@@ -4,6 +4,7 @@ import { useProgress } from '@/hooks/useProgress'
 import { StreakCard } from './StreakCard'
 import { MinutesChart } from './MinutesChart'
 import { RecentTopics } from './RecentTopics'
+import { FamilyLeaderboard } from './FamilyLeaderboard'
 import { Badge } from '@/components/ui/Badge'
 import { Spinner } from '@/components/ui/Spinner'
 import Link from 'next/link'
@@ -34,8 +35,8 @@ export function ProgressDashboard() {
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h1 className="text-xl md:text-2xl font-bold text-slate-800">Your Progress</h1>
-          <p className="text-sm text-slate-400 mt-0.5">Keep the streak going — even 5 minutes counts.</p>
+          <h1 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-100">Your Progress</h1>
+          <p className="text-sm text-slate-400 dark:text-slate-500 mt-0.5">Keep the streak going — even 5 minutes counts.</p>
         </div>
         <Badge variant={levelVariant} className="text-xs px-2.5 py-1 shrink-0 mt-1">{levelLabel}</Badge>
       </div>
@@ -43,9 +44,9 @@ export function ProgressDashboard() {
       {/* Stats row */}
       <div className="grid grid-cols-2 gap-3">
         <StreakCard streak={stats?.streak ?? 0} />
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex flex-col justify-center">
-          <p className="text-3xl font-bold text-indigo-600">{stats?.totalMinutes ?? 0}</p>
-          <p className="text-xs text-slate-400 mt-1 font-medium">Total minutes</p>
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex flex-col justify-center dark:bg-slate-900 dark:border-slate-800">
+          <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{stats?.totalMinutes ?? 0}</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 font-medium">Total minutes</p>
         </div>
       </div>
 
@@ -54,6 +55,8 @@ export function ProgressDashboard() {
       {(stats?.recentTopics?.length ?? 0) > 0 && (
         <RecentTopics topics={stats!.recentTopics} />
       )}
+
+      <FamilyLeaderboard />
 
       <Link
         href="/conversation"

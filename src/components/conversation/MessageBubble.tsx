@@ -72,7 +72,7 @@ export function MessageBubble({ message, onReplay }: MessageBubbleProps) {
             'px-4 py-3 text-sm leading-relaxed shadow-sm',
             isUser
               ? 'bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-2xl rounded-br-sm'
-              : 'bg-white text-slate-800 rounded-2xl rounded-bl-sm border border-slate-100'
+              : 'bg-white text-slate-800 rounded-2xl rounded-bl-sm border border-slate-100 dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700'
           )}
         >
           {message.isStreaming && !message.content ? (
@@ -121,7 +121,7 @@ export function MessageBubble({ message, onReplay }: MessageBubbleProps) {
           </div>
         )}
         {showTranslation && translation && (
-          <p className="text-xs text-slate-500 italic px-1">{translation}</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 italic px-1">{translation}</p>
         )}
       </div>
     </div>
