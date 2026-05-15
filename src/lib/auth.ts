@@ -2,7 +2,7 @@ import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import { prisma } from './prisma'
-import type { Level } from '@/types'
+import type { Level, TeachingStyle } from '@/types'
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -29,6 +29,7 @@ export const authOptions: NextAuthOptions = {
           email: null,
           isAdmin: user.isAdmin,
           level: user.level as Level,
+          teachingStyle: (user.teachingStyle ?? 'CONVERSATION') as TeachingStyle,
         }
       },
     }),
@@ -40,6 +41,7 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id
         token.isAdmin = user.isAdmin
         token.level = user.level
+        token.teachingStyle = user.teachingStyle
       }
       return token
     },
@@ -47,6 +49,7 @@ export const authOptions: NextAuthOptions = {
       session.user.id = token.id
       session.user.isAdmin = token.isAdmin
       session.user.level = token.level
+      session.user.teachingStyle = token.teachingStyle
       return session
     },
   },

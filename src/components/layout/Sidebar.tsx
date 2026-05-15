@@ -9,6 +9,7 @@ import { ThemeToggle } from '@/components/ui/ThemeToggle'
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: '📊' },
   { href: '/conversation', label: 'Conversations', icon: '💬' },
+  { href: '/preferences', label: 'Preferences', icon: '⚙️' },
 ]
 
 export function Sidebar() {

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN "teachingStyle" TEXT NOT NULL DEFAULT 'CONVERSATION';

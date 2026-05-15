@@ -14,11 +14,12 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   const session = await requireAdmin()
   if (!session) return Response.json({ error: 'Forbidden' }, { status: 403 })
 
-  const { displayName, level, isAdmin, password } = await req.json()
+  const { displayName, level, teachingStyle, isAdmin, password } = await req.json()
   const data: Record<string, unknown> = {}
 
   if (displayName) data.displayName = displayName
   if (level) data.level = level
+  if (teachingStyle) data.teachingStyle = teachingStyle
   if (typeof isAdmin === 'boolean') {
     // Prevent removing own admin
     if (params.id === session.user.id && !isAdmin) {
@@ -31,7 +32,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   const user = await prisma.user.update({
     where: { id: params.id },
     data,
-    select: { id: true, username: true, displayName: true, level: true, isAdmin: true, createdAt: true },
+    select: { id: true, username: true, displayName: true, level: true, teachingStyle: true, isAdmin: true, createdAt: true },
   })
 
   return Response.json(user)

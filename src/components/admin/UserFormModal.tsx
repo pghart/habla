@@ -16,6 +16,7 @@ export function UserFormModal({ user, onClose, onSaved }: UserFormModalProps) {
     username: '',
     password: '',
     level: 'BEGINNER',
+    teachingStyle: 'CONVERSATION',
     isAdmin: false,
   })
   const [error, setError] = useState('')
@@ -24,7 +25,14 @@ export function UserFormModal({ user, onClose, onSaved }: UserFormModalProps) {
 
   useEffect(() => {
     if (user) {
-      setForm({ displayName: user.displayName, username: user.username, password: '', level: user.level, isAdmin: user.isAdmin })
+      setForm({
+        displayName: user.displayName,
+        username: user.username,
+        password: '',
+        level: user.level,
+        teachingStyle: user.teachingStyle ?? 'CONVERSATION',
+        isAdmin: user.isAdmin,
+      })
     }
   }, [user])
 
@@ -36,6 +44,7 @@ export function UserFormModal({ user, onClose, onSaved }: UserFormModalProps) {
     const payload: Record<string, unknown> = {
       displayName: form.displayName,
       level: form.level,
+      teachingStyle: form.teachingStyle,
       isAdmin: form.isAdmin,
     }
     if (!isEdit) payload.username = form.username
@@ -98,6 +107,16 @@ export function UserFormModal({ user, onClose, onSaved }: UserFormModalProps) {
               <option value="BEGINNER">Beginner</option>
               <option value="INTERMEDIATE">Intermediate</option>
               <option value="ADVANCED">Advanced</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-slate-600 mb-1">Teaching Style</label>
+            <select value={form.teachingStyle} onChange={e => setForm(f => ({ ...f, teachingStyle: e.target.value }))}
+              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+              <option value="CONVERSATION">Conversation (natural chat)</option>
+              <option value="DRILLS">Drills (grammar pattern per turn)</option>
+              <option value="IMMERSION">Immersion (mostly Spanish, pushed)</option>
             </select>
           </div>
 

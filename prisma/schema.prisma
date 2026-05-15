@@ -8,16 +8,17 @@ datasource db {
 }
 
 model User {
-  id           String    @id @default(cuid())
-  username     String    @unique
-  passwordHash String
-  displayName  String
-  level        String    @default("BEGINNER")
-  isAdmin      Boolean   @default(false)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  sessions     ConversationSession[]
-  progress     DailyProgress[]
+  id            String    @id @default(cuid())
+  username      String    @unique
+  passwordHash  String
+  displayName   String
+  level         String    @default("BEGINNER")
+  teachingStyle String    @default("CONVERSATION")
+  isAdmin       Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      ConversationSession[]
+  progress      DailyProgress[]
 }
 
 model ConversationSession {

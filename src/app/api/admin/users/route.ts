@@ -11,7 +11,7 @@ export async function GET() {
   }
 
   const users = await prisma.user.findMany({
-    select: { id: true, username: true, displayName: true, level: true, isAdmin: true, createdAt: true },
+    select: { id: true, username: true, displayName: true, level: true, teachingStyle: true, isAdmin: true, createdAt: true },
     orderBy: { createdAt: 'asc' },
   })
 
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     }
   }
 
-  const { username, displayName, password, level, isAdmin } = await req.json()
+  const { username, displayName, password, level, teachingStyle, isAdmin } = await req.json()
 
   if (!username || !displayName || !password) {
     return Response.json({ error: 'Missing required fields' }, { status: 400 })
@@ -49,9 +49,10 @@ export async function POST(req: Request) {
       displayName,
       passwordHash,
       level: level ?? 'BEGINNER',
+      teachingStyle: teachingStyle ?? 'CONVERSATION',
       isAdmin: isFirstUser ? true : (isAdmin ?? false),
     },
-    select: { id: true, username: true, displayName: true, level: true, isAdmin: true, createdAt: true },
+    select: { id: true, username: true, displayName: true, level: true, teachingStyle: true, isAdmin: true, createdAt: true },
   })
 
   return Response.json(user, { status: 201 })

@@ -4,7 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { getAnthropicClient, buildSystemPrompt } from '@/lib/claude'
 import { todayUtcMidnight } from '@/lib/utils'
-import type { Level } from '@/types'
+import type { Level, TeachingStyle } from '@/types'
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions)
@@ -25,7 +25,8 @@ export async function POST(req: Request) {
   }
 
   const level = session.user.level as Level
-  const systemPrompt = buildSystemPrompt(level)
+  const style = (session.user.teachingStyle ?? 'CONVERSATION') as TeachingStyle
+  const systemPrompt = buildSystemPrompt(level, style)
 
   const history = conv.messages.map(m => ({
     role: m.role === 'USER' ? ('user' as const) : ('assistant' as const),

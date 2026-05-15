@@ -1,4 +1,5 @@
 export type Level = 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED'
+export type TeachingStyle = 'CONVERSATION' | 'DRILLS' | 'IMMERSION'
 export type Role = 'USER' | 'ASSISTANT'
 
 export interface ChatMessage {
@@ -46,6 +47,7 @@ export interface UserSummary {
   username: string
   displayName: string
   level: Level
+  teachingStyle: TeachingStyle
   isAdmin: boolean
   createdAt: string
 }

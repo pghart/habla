@@ -1,5 +1,5 @@
 import type { DefaultSession } from 'next-auth'
-import type { Level } from './index'
+import type { Level, TeachingStyle } from './index'
 
 declare module 'next-auth' {
   interface Session {
@@ -7,6 +7,7 @@ declare module 'next-auth' {
       id: string
       isAdmin: boolean
       level: Level
+      teachingStyle: TeachingStyle
     } & DefaultSession['user']
   }
 
@@ -14,6 +15,7 @@ declare module 'next-auth' {
     id: string
     isAdmin: boolean
     level: Level
+    teachingStyle: TeachingStyle
   }
 }
 
@@ -22,5 +24,6 @@ declare module 'next-auth/jwt' {
     id: string
     isAdmin: boolean
     level: Level
+    teachingStyle: TeachingStyle
   }
 }
