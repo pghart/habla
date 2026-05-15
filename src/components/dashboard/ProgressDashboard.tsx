@@ -64,6 +64,24 @@ export function ProgressDashboard() {
         </svg>
         Start practicing
       </Link>
+
+      <BuildFooter />
     </div>
+  )
+}
+
+function BuildFooter() {
+  const sha = process.env.NEXT_PUBLIC_GIT_SHA
+  const date = process.env.NEXT_PUBLIC_BUILD_DATE
+  if (!sha && !date) return null
+  const formatted = date && date !== 'unknown'
+    ? new Date(date).toLocaleString(undefined, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+    : null
+  return (
+    <p className="text-[11px] text-slate-300 text-center pt-2">
+      {formatted && <span>{formatted}</span>}
+      {formatted && sha && sha !== 'unknown' && <span className="mx-1.5">·</span>}
+      {sha && sha !== 'unknown' && <span className="font-mono">{sha}</span>}
+    </p>
   )
 }
