@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   habla:
-    build: .
+    image: ghcr.io/pghart/habla:latest
     # Port not exposed to host — access via Cloudflare tunnel at http://habla:3000
     volumes:
       - sqlite_data:/app/data
