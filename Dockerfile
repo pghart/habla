@@ -39,6 +39,10 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
 
+# Prisma CLI self-re-execs as `prisma` from PATH, so expose it
+RUN chmod +x /app/node_modules/prisma/build/index.js && \
+    ln -sf /app/node_modules/prisma/build/index.js /usr/local/bin/prisma
+
 # Entrypoint script
 COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
