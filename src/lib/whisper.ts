@@ -12,10 +12,11 @@ export async function transcribeAudio(audioBuffer: Buffer, mimeType: string): Pr
   const extension = mimeType.includes('ogg') ? 'ogg' : 'webm'
   const file = new File([new Uint8Array(audioBuffer)], `audio.${extension}`, { type: mimeType })
 
+  // No `language` hint — let Whisper auto-detect so English speech stays
+  // English (forcing 'es' makes Whisper translate the audio into Spanish).
   const result = await openai.audio.transcriptions.create({
     file,
     model: 'whisper-1',
-    language: 'es',
     response_format: 'text',
   })
 
