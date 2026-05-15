@@ -1,7 +1,9 @@
-# Stage 1: Install dependencies
+# Stage 1: Install dependencies (prisma generate runs via postinstall)
 FROM node:20-slim AS deps
 WORKDIR /app
+ENV DATABASE_URL="file:/tmp/build.db"
 COPY package.json ./
+COPY prisma ./prisma
 RUN npm install
 
 # Stage 2: Build
@@ -11,7 +13,6 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV DATABASE_URL="file:/tmp/build.db"
-RUN ./node_modules/.bin/prisma generate
 RUN npm run build
 
 # Stage 3: Runner
