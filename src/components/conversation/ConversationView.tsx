@@ -38,7 +38,8 @@ export function ConversationView({ sessionId, topic, initialMessages }: Conversa
 
     return () => {
       clearInterval(interval)
-      const seconds = Math.floor((Date.now() - sessionStartRef.current) / 1000)
+      const startTime = sessionStartRef.current
+      const seconds = Math.floor((Date.now() - startTime) / 1000)
       fetch(`/api/sessions/${sessionId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },

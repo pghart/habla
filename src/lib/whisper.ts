@@ -10,7 +10,7 @@ async function getOpenAIClient(): Promise<OpenAI> {
 export async function transcribeAudio(audioBuffer: Buffer, mimeType: string): Promise<string> {
   const openai = await getOpenAIClient()
   const extension = mimeType.includes('ogg') ? 'ogg' : 'webm'
-  const file = new File([audioBuffer], `audio.${extension}`, { type: mimeType })
+  const file = new File([new Uint8Array(audioBuffer)], `audio.${extension}`, { type: mimeType })
 
   const result = await openai.audio.transcriptions.create({
     file,
