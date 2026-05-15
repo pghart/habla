@@ -8,7 +8,7 @@ node_modules/
 out/
 
 # Environment files — never commit real secrets
-.env
+# .env is committed (build-control vars only, no secrets)
 .env.local
 .env.*.local
 
