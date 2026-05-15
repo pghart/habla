@@ -1,6 +1,7 @@
 # Stage 1: Install dependencies (prisma generate runs via postinstall)
 FROM node:20-slim AS deps
 WORKDIR /app
+RUN apt-get update && apt-get install -y openssl --no-install-recommends && rm -rf /var/lib/apt/lists/*
 ENV DATABASE_URL="file:/tmp/build.db"
 COPY package.json ./
 COPY prisma ./prisma
@@ -9,6 +10,7 @@ RUN npm install
 # Stage 2: Build
 FROM node:20-slim AS builder
 WORKDIR /app
+RUN apt-get update && apt-get install -y openssl --no-install-recommends && rm -rf /var/lib/apt/lists/*
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -20,6 +22,8 @@ FROM node:20-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN apt-get update && apt-get install -y openssl --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 --ingroup nodejs nextjs
