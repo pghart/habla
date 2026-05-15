@@ -40,18 +40,32 @@ export function Sidebar() {
         ))}
 
         {session?.user?.isAdmin && (
-          <Link
-            href="/admin/users"
-            className={cn(
-              'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors',
-              pathname.startsWith('/admin')
-                ? 'bg-indigo-50 text-indigo-700 font-medium'
-                : 'text-slate-600 hover:bg-slate-50'
-            )}
-          >
-            <span>⚙️</span>
-            Family
-          </Link>
+          <>
+            <Link
+              href="/admin/users"
+              className={cn(
+                'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors',
+                pathname === '/admin/users'
+                  ? 'bg-indigo-50 text-indigo-700 font-medium'
+                  : 'text-slate-600 hover:bg-slate-50'
+              )}
+            >
+              <span>👨‍👩‍👧</span>
+              Family
+            </Link>
+            <Link
+              href="/admin/settings"
+              className={cn(
+                'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors',
+                pathname === '/admin/settings'
+                  ? 'bg-indigo-50 text-indigo-700 font-medium'
+                  : 'text-slate-600 hover:bg-slate-50'
+              )}
+            >
+              <span>🔑</span>
+              API Settings
+            </Link>
+          </>
         )}
       </nav>
 

@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { anthropic, buildSystemPrompt } from '@/lib/claude'
+import { getAnthropicClient, buildSystemPrompt } from '@/lib/claude'
 import { todayUtcMidnight } from '@/lib/utils'
 import type { Level } from '@/types'
 
@@ -40,6 +40,7 @@ export async function POST(req: Request) {
       let fullText = ''
 
       try {
+        const anthropic = await getAnthropicClient()
         const anthropicStream = anthropic.messages.stream({
           model: 'claude-sonnet-4-6',
           max_tokens: 512,

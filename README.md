@@ -100,28 +100,37 @@ All costs are pay-as-you-go except ElevenLabs (plan-based).
 1. In Portainer → **Stacks → Add Stack → Repository**
 2. Set your GitHub repo URL (`https://github.com/pghart/habla`), branch `main`, compose file `docker-compose.yml`
 3. Enable **GitOps updates** and copy the webhook URL → add it to your GitHub repo under **Settings → Webhooks** (push events)
-4. Add the following **environment variables** in Portainer:
+4. Add only these **environment variables** in Portainer — API keys are configured inside the app, not here:
 
 ```
 NEXTAUTH_SECRET         # generate with: openssl rand -base64 32
 NEXTAUTH_URL            # https://habla.yourdomain.com
-ANTHROPIC_API_KEY       # sk-ant-...
-OPENAI_API_KEY          # sk-...
 CLOUDFLARE_TUNNEL_TOKEN
-
-# TTS: set to "openai" (default) or "elevenlabs"
-TTS_PROVIDER            # openai
-
-# Only needed if TTS_PROVIDER=elevenlabs
-ELEVENLABS_API_KEY
-ELEVENLABS_VOICE_ID
 ```
 
 5. Click **Deploy the stack**
 
 ### First run
 
-Navigate to your URL → you'll be redirected to `/setup` to create your admin account. Then go to **Family** in the sidebar to add accounts for other family members.
+1. Navigate to your URL → redirected to `/setup` → create your admin account
+2. Log in, then go to **Admin → API Settings** in the sidebar
+3. Enter and test each API key through the UI — keys are encrypted before being saved to the database
+4. Go to **Family** to add accounts for other family members
+
+### API Settings page
+
+The settings page (admin only) lets you configure and test all API connections without touching docker-compose or Portainer:
+
+| Section | What you configure |
+|---------|-------------------|
+| **Anthropic** | API key + connection test |
+| **OpenAI** | API key + connection test (covers Whisper STT and TTS) |
+| **TTS Provider** | Toggle between OpenAI TTS and ElevenLabs |
+| **ElevenLabs** | API key + connection test + voice sample playback |
+
+Each key shows a masked preview of the stored value. The **Play sample** button for ElevenLabs voice actually generates and plays "Hola, me llamo Sofía." so you can audition the voice before committing to it.
+
+Keys are encrypted with AES-256-GCM using your `NEXTAUTH_SECRET` as the key before being stored in the database.
 
 ---
 
@@ -135,14 +144,14 @@ Push to GitHub → the Portainer webhook triggers an automatic rebuild and redep
 
 ```bash
 cp .env.example .env.local
-# Fill in your API keys
+# For local dev, uncomment and fill in API keys in .env.local
 
 npm install
 npx prisma migrate dev --name init
 npm run dev
 ```
 
-Open http://localhost:3000 — on first visit you'll be sent to `/setup`.
+Open http://localhost:3000 → `/setup` to create admin → then go to **Admin → API Settings** to enter keys through the UI (same as production), or uncomment them in `.env.local` for faster local iteration.
 
 ---
 
@@ -156,6 +165,7 @@ Browser
 
 Data: SQLite via Prisma (Docker volume, persists across container restarts)
 Auth: NextAuth.js credentials (bcrypt hashed passwords, JWT sessions)
+Config: API keys stored AES-256-GCM encrypted in SQLite, managed via admin UI
 Tunnel: cloudflared sidecar container → Cloudflare Zero Trust
 Deploy: Portainer GitOps stack → auto-rebuild on GitHub push
 ```

@@ -1,9 +1,8 @@
 import OpenAI from 'openai'
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+import { getConfigOrEnv, CONFIG_KEYS } from './config'
 
 export async function generateSpeech(text: string): Promise<Response> {
-  const provider = process.env.TTS_PROVIDER ?? 'openai'
+  const provider = await getConfigOrEnv(CONFIG_KEYS.TTS_PROVIDER, 'TTS_PROVIDER') ?? 'openai'
 
   if (provider === 'elevenlabs') {
     return elevenLabsTTS(text)
@@ -12,6 +11,10 @@ export async function generateSpeech(text: string): Promise<Response> {
 }
 
 async function openaiTTS(text: string): Promise<Response> {
+  const apiKey = await getConfigOrEnv(CONFIG_KEYS.OPENAI_API_KEY, 'OPENAI_API_KEY')
+  if (!apiKey) throw new Error('OpenAI API key not configured. Set it in Admin → Settings.')
+
+  const openai = new OpenAI({ apiKey })
   const mp3 = await openai.audio.speech.create({
     model: 'tts-1',
     voice: 'nova',
@@ -25,15 +28,18 @@ async function openaiTTS(text: string): Promise<Response> {
 }
 
 async function elevenLabsTTS(text: string): Promise<Response> {
-  const apiKey = process.env.ELEVENLABS_API_KEY
-  const voiceId = process.env.ELEVENLABS_VOICE_ID ?? 'EXAVITQu4vr4xnSDxMaL'
+  const apiKey = await getConfigOrEnv(CONFIG_KEYS.ELEVENLABS_API_KEY, 'ELEVENLABS_API_KEY')
+  const voiceId = await getConfigOrEnv(CONFIG_KEYS.ELEVENLABS_VOICE_ID, 'ELEVENLABS_VOICE_ID')
+
+  if (!apiKey) throw new Error('ElevenLabs API key not configured. Set it in Admin → Settings.')
+  if (!voiceId) throw new Error('ElevenLabs Voice ID not configured. Set it in Admin → Settings.')
 
   const response = await fetch(
     `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream`,
     {
       method: 'POST',
       headers: {
-        'xi-api-key': apiKey!,
+        'xi-api-key': apiKey,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

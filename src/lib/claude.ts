@@ -1,9 +1,12 @@
 import Anthropic from '@anthropic-ai/sdk'
+import { getConfigOrEnv, CONFIG_KEYS } from './config'
 import type { Level } from '@/types'
 
-export const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-})
+export async function getAnthropicClient(): Promise<Anthropic> {
+  const apiKey = await getConfigOrEnv(CONFIG_KEYS.ANTHROPIC_API_KEY, 'ANTHROPIC_API_KEY')
+  if (!apiKey) throw new Error('Anthropic API key not configured. Set it in Admin → Settings.')
+  return new Anthropic({ apiKey })
+}
 
 function levelInstructions(level: Level): string {
   switch (level) {

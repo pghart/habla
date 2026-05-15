@@ -7,14 +7,12 @@ services:
     volumes:
       - sqlite_data:/app/data
     environment:
+      # Infrastructure — set these in Portainer, do not commit values to GitHub
       DATABASE_URL: "file:/app/data/habla.db"
       NEXTAUTH_SECRET: "${NEXTAUTH_SECRET}"
       NEXTAUTH_URL: "${NEXTAUTH_URL}"
-      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY}"
-      OPENAI_API_KEY: "${OPENAI_API_KEY}"
-      TTS_PROVIDER: "${TTS_PROVIDER:-openai}"
-      ELEVENLABS_API_KEY: "${ELEVENLABS_API_KEY:-}"
-      ELEVENLABS_VOICE_ID: "${ELEVENLABS_VOICE_ID:-}"
+      # API keys are configured through the in-app Admin → API Settings page
+      # and stored encrypted in the database. No need to set them here.
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]

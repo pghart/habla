@@ -1,8 +1,14 @@
 import OpenAI from 'openai'
+import { getConfigOrEnv, CONFIG_KEYS } from './config'
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+async function getOpenAIClient(): Promise<OpenAI> {
+  const apiKey = await getConfigOrEnv(CONFIG_KEYS.OPENAI_API_KEY, 'OPENAI_API_KEY')
+  if (!apiKey) throw new Error('OpenAI API key not configured. Set it in Admin → Settings.')
+  return new OpenAI({ apiKey })
+}
 
 export async function transcribeAudio(audioBuffer: Buffer, mimeType: string): Promise<string> {
+  const openai = await getOpenAIClient()
   const extension = mimeType.includes('ogg') ? 'ogg' : 'webm'
   const file = new File([audioBuffer], `audio.${extension}`, { type: mimeType })
 
