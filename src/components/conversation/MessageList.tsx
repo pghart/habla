@@ -4,7 +4,13 @@ import { useEffect, useRef } from 'react'
 import { MessageBubble } from './MessageBubble'
 import type { ChatMessage } from '@/types'
 
-export function MessageList({ messages }: { messages: ChatMessage[] }) {
+export function MessageList({
+  messages,
+  onReplay,
+}: {
+  messages: ChatMessage[]
+  onReplay?: (text: string) => void
+}) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -25,7 +31,7 @@ export function MessageList({ messages }: { messages: ChatMessage[] }) {
         </div>
       )}
       {messages.map(msg => (
-        <MessageBubble key={msg.id} message={msg} />
+        <MessageBubble key={msg.id} message={msg} onReplay={onReplay} />
       ))}
       <div ref={bottomRef} />
     </div>

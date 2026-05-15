@@ -6,6 +6,7 @@ import type { ChatMessage } from '@/types'
 
 interface MessageBubbleProps {
   message: ChatMessage
+  onReplay?: (text: string) => void
 }
 
 function renderWithVocab(text: string) {
@@ -23,7 +24,7 @@ function renderWithVocab(text: string) {
   })
 }
 
-export function MessageBubble({ message }: MessageBubbleProps) {
+export function MessageBubble({ message, onReplay }: MessageBubbleProps) {
   const [showTranslation, setShowTranslation] = useState(false)
   const isUser = message.role === 'USER'
 
@@ -65,14 +66,28 @@ export function MessageBubble({ message }: MessageBubbleProps) {
           )}
         </div>
 
-        {/* Translation toggle */}
+        {/* Replay + translation toggle */}
         {!isUser && !message.isStreaming && message.content && (
-          <button
-            onClick={() => setShowTranslation(v => !v)}
-            className="text-[11px] text-slate-400 hover:text-indigo-500 transition-colors px-1 py-1 -mt-0.5"
-          >
-            {showTranslation ? 'Hide translation' : 'Show translation'}
-          </button>
+          <div className="flex items-center gap-3 -mt-0.5 px-1">
+            {onReplay && (
+              <button
+                onClick={() => onReplay(message.content)}
+                className="text-[11px] text-slate-400 hover:text-indigo-500 transition-colors py-1 flex items-center gap-1"
+                aria-label="Replay audio"
+              >
+                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
+                </svg>
+                Replay
+              </button>
+            )}
+            <button
+              onClick={() => setShowTranslation(v => !v)}
+              className="text-[11px] text-slate-400 hover:text-indigo-500 transition-colors py-1"
+            >
+              {showTranslation ? 'Hide translation' : 'Show translation'}
+            </button>
+          </div>
         )}
         {showTranslation && message.translation && (
           <p className="text-xs text-slate-500 italic px-1">{message.translation}</p>

@@ -21,6 +21,19 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
   return Response.json(conv)
 }
 
+export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
+  const session = await getServerSession(authOptions)
+  if (!session) return Response.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const conv = await prisma.conversationSession.findUnique({ where: { id: params.id } })
+  if (!conv || conv.userId !== session.user.id) {
+    return Response.json({ error: 'Not found' }, { status: 404 })
+  }
+
+  await prisma.conversationSession.delete({ where: { id: params.id } })
+  return Response.json({ ok: true })
+}
+
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions)
   if (!session) return Response.json({ error: 'Unauthorized' }, { status: 401 })

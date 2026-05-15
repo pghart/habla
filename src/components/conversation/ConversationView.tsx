@@ -79,7 +79,7 @@ export function ConversationView({ sessionId, topic, initialMessages }: Conversa
       </div>
 
       {/* Messages */}
-      <MessageList messages={messages} />
+      <MessageList messages={messages} onReplay={playText} />
 
       {/* Input bar */}
       <div className="px-3 md:px-4 py-3 bg-white border-t border-slate-100 shrink-0">
