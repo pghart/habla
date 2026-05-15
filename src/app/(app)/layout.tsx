@@ -1,5 +1,6 @@
 import { Sidebar } from '@/components/layout/Sidebar'
 import { BottomNav } from '@/components/layout/BottomNav'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -7,6 +8,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Sidebar: hidden on mobile, visible md+ */}
       <div className="hidden md:flex md:flex-shrink-0">
         <Sidebar />
+      </div>
+
+      {/* Mobile-only floating theme toggle */}
+      <div className="md:hidden fixed top-3 right-3 z-40">
+        <ThemeToggle />
       </div>
 
       {/* Main content: add bottom padding on mobile to clear the bottom nav */}
