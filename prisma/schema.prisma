@@ -12,18 +12,12 @@ model User {
   username     String    @unique
   passwordHash String
   displayName  String
-  level        Level     @default(BEGINNER)
+  level        String    @default("BEGINNER")
   isAdmin      Boolean   @default(false)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   sessions     ConversationSession[]
   progress     DailyProgress[]
-}
-
-enum Level {
-  BEGINNER
-  INTERMEDIATE
-  ADVANCED
 }
 
 model ConversationSession {
@@ -42,17 +36,12 @@ model Message {
   id          String              @id @default(cuid())
   sessionId   String
   session     ConversationSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  role        Role
+  role        String
   content     String
   translation String?
   createdAt   DateTime            @default(now())
 
   @@index([sessionId])
-}
-
-enum Role {
-  USER
-  ASSISTANT
 }
 
 model Config {
