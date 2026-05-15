@@ -9,9 +9,9 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npx prisma generate
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV DATABASE_URL="file:/tmp/build.db"
+RUN ./node_modules/.bin/prisma generate
 RUN npm run build
 
 # Stage 3: Runner
