@@ -10,7 +10,8 @@ export const prisma =
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
-// Enable WAL mode for better concurrent read performance
-prisma.$executeRawUnsafe('PRAGMA journal_mode=WAL;').catch(() => {})
+// Enable WAL mode for better concurrent read performance.
+// PRAGMA returns a result row, so use $queryRawUnsafe (executeRaw rejects rows).
+prisma.$queryRawUnsafe('PRAGMA journal_mode=WAL;').catch(() => {})
 
 export default prisma
