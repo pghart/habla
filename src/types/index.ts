@@ -27,11 +27,17 @@ export interface Topic {
   description: string
 }
 
+export interface RecentTopic {
+  topic: string
+  topicSlug: string
+  sessionId: string
+}
+
 export interface ProgressStats {
   streak: number
   totalMinutes: number
   weeklyMinutes: number[]
-  recentTopics: string[]
+  recentTopics: RecentTopic[]
   level: Level
 }
 

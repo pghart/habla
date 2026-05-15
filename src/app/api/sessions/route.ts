@@ -35,6 +35,13 @@ export async function POST(req: Request) {
     return Response.json({ error: 'Missing topic' }, { status: 400 })
   }
 
+  // One session per user+topic — resume if it exists, create otherwise
+  const existing = await prisma.conversationSession.findFirst({
+    where: { userId: session.user.id, topicSlug },
+    select: { id: true },
+  })
+  if (existing) return Response.json(existing)
+
   const conv = await prisma.conversationSession.create({
     data: { userId: session.user.id, topic, topicSlug },
     select: { id: true },

@@ -44,14 +44,18 @@ export async function GET() {
 
   const totalMinutes = progressRecords.reduce((sum, p) => sum + p.minutesPracticed, 0)
 
-  // Recent topics (last 5 unique)
+  // Recent topics (last 5 unique by topicSlug, with resume target)
   const recentSessions = await prisma.conversationSession.findMany({
     where: { userId },
     orderBy: { startedAt: 'desc' },
     take: 20,
-    select: { topic: true },
+    select: { id: true, topic: true, topicSlug: true },
   })
-  const recentTopics = Array.from(new Set(recentSessions.map(s => s.topic))).slice(0, 5)
+  const seen = new Set<string>()
+  const recentTopics = recentSessions
+    .filter(s => (seen.has(s.topicSlug) ? false : (seen.add(s.topicSlug), true)))
+    .slice(0, 5)
+    .map(s => ({ topic: s.topic, topicSlug: s.topicSlug, sessionId: s.id }))
 
   const stats: ProgressStats = {
     streak,
