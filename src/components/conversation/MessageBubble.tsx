@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { Spinner } from '@/components/ui/Spinner'
 import type { ChatMessage } from '@/types'
 
 interface MessageBubbleProps {
@@ -26,7 +27,35 @@ function renderWithVocab(text: string) {
 
 export function MessageBubble({ message, onReplay }: MessageBubbleProps) {
   const [showTranslation, setShowTranslation] = useState(false)
+  const [translation, setTranslation] = useState<string | null>(message.translation ?? null)
+  const [translating, setTranslating] = useState(false)
   const isUser = message.role === 'USER'
+
+  async function toggleTranslation() {
+    if (showTranslation) {
+      setShowTranslation(false)
+      return
+    }
+    if (translation) {
+      setShowTranslation(true)
+      return
+    }
+    setTranslating(true)
+    try {
+      const res = await fetch('/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: message.content }),
+      })
+      const data = await res.json()
+      if (data.translation) {
+        setTranslation(data.translation)
+        setShowTranslation(true)
+      }
+    } finally {
+      setTranslating(false)
+    }
+  }
 
   return (
     <div className={cn('flex items-end gap-2.5', isUser ? 'flex-row-reverse' : 'flex-row')}>
@@ -82,15 +111,17 @@ export function MessageBubble({ message, onReplay }: MessageBubbleProps) {
               </button>
             )}
             <button
-              onClick={() => setShowTranslation(v => !v)}
-              className="text-[11px] text-slate-400 hover:text-indigo-500 transition-colors py-1"
+              onClick={toggleTranslation}
+              disabled={translating}
+              className="text-[11px] text-slate-400 hover:text-indigo-500 transition-colors py-1 flex items-center gap-1 disabled:opacity-50"
             >
-              {showTranslation ? 'Hide translation' : 'Show translation'}
+              {translating && <Spinner className="w-3 h-3" />}
+              {translating ? 'Translating…' : showTranslation ? 'Hide translation' : 'Show translation'}
             </button>
           </div>
         )}
-        {showTranslation && message.translation && (
-          <p className="text-xs text-slate-500 italic px-1">{message.translation}</p>
+        {showTranslation && translation && (
+          <p className="text-xs text-slate-500 italic px-1">{translation}</p>
         )}
       </div>
     </div>
