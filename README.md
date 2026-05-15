@@ -9,6 +9,7 @@ A self-hosted Spanish learning app for families. AI-powered conversation practic
 - **Audio playback** — Sofía's responses are read aloud via OpenAI TTS or ElevenLabs
 - **Family accounts** — Admin-managed user accounts, each with their own progress and history
 - **Progress tracking** — Daily streaks, weekly practice minutes, recent topics
+- **Mobile-friendly** — Bottom navigation bar on phones, sidebar on desktop; 44px+ touch targets throughout
 - **Self-hosted** — Runs in Docker, served via Cloudflare tunnel
 
 ---
@@ -33,7 +34,7 @@ One OpenAI key covers both speech-to-text (Whisper) and text-to-speech (TTS).
 
 ### ElevenLabs (optional — alternative TTS)
 
-ElevenLabs offers more natural-sounding voices with stronger accent support. Use it instead of OpenAI TTS by setting `TTS_PROVIDER=elevenlabs` in your env vars.
+ElevenLabs offers more natural-sounding voices with stronger accent support. Switch to it from the **Admin → API Settings** page inside the app — no env vars needed.
 
 **Step 1 — API Key:**
 1. Create an account at [elevenlabs.io](https://elevenlabs.io)
